@@ -104,6 +104,8 @@ eq_cub4 <- function(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_tras
     
     # and instead we consider only the jacobian of the transformation that transforms the domain from 
     # [0,1]x[0,1] in R^2
+
+    # ANSWER to the DOUBT: the jacobian simplifies with the factor (given by chain rule derivation) that multiplies the transformed pdf. 
     
     out <- dnorm(z) * dnorm(g) * jac * switch(pos,
       g_func1(z1, z2),
