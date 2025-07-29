@@ -95,8 +95,8 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
     out <- c(sum(w2p * q1 * (a_frac - p_prox)),
              1 - kappa - 2 * sum(w2p / (1 + b * p_prox * (1 - p_prox))),
              kappa^2 * sigma^2 - 2 * b^2 * sum(w2p * (a_frac - p_prox)^2))
-    cat("max|q1| =", max(abs(q1)), "max|q2| =", max(abs(q2)), "\n")
-    cat("max(|out|)", max(abs(out)), "\n")
+    ## cat("max|q1| =", max(abs(q1)), "max|q2| =", max(abs(q2)), "\n")
+    ## cat("max(|out|)", max(abs(out)), "\n")
     out
 }
 
