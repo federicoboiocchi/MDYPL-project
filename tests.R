@@ -24,20 +24,20 @@ gh <- gauss.quad(50, kind = "hermite")
 b_fun <- microbenchmark(
     fb = eqns_GH(mu, b, sigma, kappa, gamma, alpha, n = 50, lim_opt = 100),
     fb_vec = eqns_GH_vec(mu, b, sigma, kappa, gamma, alpha, n = 50, lim_opt = 100),
-    ik_mod = eqns_GH2(mu, b, sigma, kappa, gamma, alpha, gh = gh),
+    ik_mod = mdypl_se(mu, b, sigma, kappa, gamma, alpha, gh = gh),
 times = 50)
 
 ## Benchmark optimization
 microbenchmark(
     fb = MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH", opt_met = "nleqslv"),
     fb_vec = MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH-vec", opt_met = "nleqslv"),
-    ik_mod = solve_mDYPL_SE(kappa, gamma, alpha, start = c(mu, b, sigma)),
+    ik_mod = solve_mdypl_se(kappa, gamma, alpha, start = c(mu, b, sigma)),
 times = 10)
 
 ## Check equality of solutions
 sol_fb <- MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH", opt_met = "nleqslv")
 sol_fb_vec <- MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH-vec", opt_met = "nleqslv")
-sol_ik_mod <- solve_mDYPL_SE(kappa, gamma, alpha, start = c(mu, b, sigma))
+sol_ik_mod <- solve_mdypl_se(kappa, gamma, alpha, start = c(mu, b, sigma))
 
 expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-06)
 expect_equal(sol_fb, sol_ik_mod, tolerance = 1e-06, check.attributes = FALSE)
