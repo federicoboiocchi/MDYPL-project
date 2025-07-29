@@ -42,6 +42,8 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
         u
     }
 
+    plogis2 <- function(x) (1 + exp(-x))^(-1)
+
     mu_gamma2 <- (mu * gamma)^2
     sigma2 <- sigma^2
     var_zs <- mu_gamma2 + kappa * sigma2
@@ -52,8 +54,8 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
     log_pdf <- log(sqrt_Bh / pi) + 2 * sqrt(rho2) * xi1 * xi2
     z <- xi1 * sqrt(2) * sqrt_Bh * gamma
     zs <- xi2 * sqrt(2) * sqrt_Bh * sqrt(var_zs)
-    p_z <- plogis(z)
-    p_prox_val <- plogis(prox(zs + a_frac * b, b))
+    p_z <- plogis2(z)
+    p_prox_val <- plogis2(prox(zs + a_frac * b, b))
     v <- w2 * p_z * exp(log_pdf)
     c(2 * sum(v * xi1 * (a_frac - p_prox_val)),
       2 * sum(v / (1 + b * p_prox_val * (1 - p_prox_val))) - 1 + kappa,
@@ -65,12 +67,18 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
 #' @param start starting values for `mu`, `b`, and `sigma`.
 #' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
 #' @export
-solve_mdypl_se <- function(kappa, gamma, alpha, start, gh = NULL, prox_tol = 1e-10, ...) {
+#'
+solve_mdypl_se <- function(kappa, gamma, alpha, start, gh = NULL, prox_tol = 1e-10, transform = FALSE, ...) {
     g <- function(pars) {
-        mdypl_se(mu = exp(pars[1]), b = exp(pars[2]), sigma = exp(pars[3]), kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
+        if (transform) pars <- exp(pars)
+        mdypl_se(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
     }
-    res <- nleqslv(log(start), g, ...)
-    soln <- exp(res$x)
+    if (transform)
+        start <- log(start)
+    res <- nleqslv(start, g, ...)
+    soln <- res$x
+    if (transform)
+        soln <- exp(soln)
     attr(soln, "funcs") <- res$fvec
     attr(soln, "iter") <- res$iter
     soln
