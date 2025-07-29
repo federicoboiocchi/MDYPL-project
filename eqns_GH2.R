@@ -100,8 +100,14 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
 
 
 #' Solving the MDYPL state evolution equations.
+#'
 #' @inheritParams mdypl_se
 #' @param start starting values for `mu`, `b`, and `sigma`.
+#' @param transform if `TRUE` (default), the optimization is with
+#'     respect to `log(mu)`, `log(b)` and `log(sigma)`. If `FALSE`,
+#'     then it is over `mu`, `b`, `sigma`. The solution is returned in
+#'     terms of the latter three, regardless of how optimization took
+#'     place.
 #' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
 #' @export
 #'
@@ -111,11 +117,11 @@ solve_mdypl_se <- function(kappa, gamma, alpha, start, gh = NULL, prox_tol = 1e-
             pars <- exp(pars)
             mdypl_se(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
         }
+        start <- log(start)
     } else {
         g <- function(pars) {
             mdypl_se2(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
         }
-        start <- log(start)
     }
     res <- nleqslv(start, g, ...)
     soln <- if (transform) exp(res$x) else res$x
