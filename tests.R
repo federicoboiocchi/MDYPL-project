@@ -41,3 +41,5 @@ sol_ik_mod <- solve_mdypl_se(kappa, gamma, alpha, start = c(mu, b, sigma))
 
 expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-06)
 expect_equal(sol_fb, sol_ik_mod, tolerance = 1e-06, check.attributes = FALSE)
+
+
