@@ -49,10 +49,9 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
     w2p <- 2 * w2 * plogis2(q1)  / pi
     p_prox <- plogis2(prox(q2 + a_frac * b, b))
     prox_resid <- a_frac - p_prox
-    out <- c(sum(w2p * q1 * prox_resid),
-             1 - kappa - sum(w2p / (1 + b * p_prox * (1 - p_prox))),
-             kappa^2 * sigma^2 - b^2 * sum(w2p * prox_resid^2))
-    out
+    c(sum(w2p * q1 * prox_resid),
+      1 - kappa - sum(w2p / (1 + b * p_prox * (1 - p_prox))),
+      kappa^2 * sigma^2 - b^2 * sum(w2p * prox_resid^2))
 }
 
 ## More transperent in terms of what is going on.
