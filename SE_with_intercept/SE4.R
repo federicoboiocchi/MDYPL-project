@@ -1,4 +1,4 @@
-#' Federico Boiocchi 20250729 (based on previous code by Ioannis Kosmidis)
+#' Federico Boiocchi 20250729 (based on the vectorization design in the script eqns_GH2.R for MDYPL SE equations eq by Ioannis Kosmidis)
 #'
 #' @param mu aggregate bias parameter.
 #' @param b parameter `b` in the state evolution functions.
