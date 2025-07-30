@@ -46,9 +46,8 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
         u
     }
 
-    p_q1 <- plogis2(q1)
+    w2p <- 2 * w2 * plogis2(q1)  / pi
     p_prox <- plogis2(prox(q2 + a_frac * b, b))
-    w2p <- 2 * w2 * p_q1  / pi
     prox_resid <- a_frac - p_prox
     out <- c(sum(w2p * q1 * prox_resid),
              1 - kappa - sum(w2p / (1 + b * p_prox * (1 - p_prox))),

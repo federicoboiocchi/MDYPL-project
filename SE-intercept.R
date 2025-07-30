@@ -26,8 +26,9 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
     xi <- gh$nodes
     wi <- gh$weights
     n_quad <- length(xi)
-    xi1 <- rep(xi, times = n_quad)
-    xi2 <- rep(xi, each = n_quad)
+    q1n <- sqrt(2) * gamma * xi
+    q1 <- rep(q1n + intercept, times = n_quad)
+    q2 <- mu * q1n + rep(sqrt(2 * kappa) * sigma * xi + iota, each = n_quad)
     w2 <- rep(wi, times = n_quad) * rep(wi, each = n_quad)
 
     plogis2 <- function(x) (1 + exp(-x))^(-1)
@@ -44,34 +45,31 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
         u
     }
 
-    sqrt2 <- sqrt(2)
+    p_q1_pos <- plogis2(q1)
+    w2pi <- w2 / pi
+    w2p_pos <- w2pi * p_q1_pos
+    w2p_neg <- w2pi - w2p_pos
 
-    q1 <- xi1 * sqrt2
+    p_prox_pos <- plogis2(prox(a_frac * b + q2, b))
+    p_prox_neg <- plogis2(prox(a_frac * b - q2, b))
 
-    z <- gamma * q1 + intercept
-    zs <- mu * gamma * xi1 * sqrt2 + sqrt(kappa) * sigma * xi2 * sqrt2 + iota
-    p_z <- plogis2(z)
-    p_z_n <- plogis2(-z)
+    prox_pos_resid <- a_frac - p_prox_pos
+    prox_neg_resid <- a_frac - p_prox_neg
 
-
-    prox_val <- prox(a_frac * b + zs, b)
-    p_prox_val <- plogis2(prox_val)
-
-    prox_val_n <- prox(a_frac * b - zs, b)
-    p_prox_val_n <- plogis2(prox_val_n)
-
-    prox_resid <- a_frac - p_prox_val
-    prox_resid_n <- a_frac - p_prox_val_n
-
-    ## four equations of the nonlinear system
-
-    v <- w2 * (1 / pi)
     out <- c(
-        sum(v * z * (p_z * (prox_resid) - p_z_n * (prox_resid_n))),
-        sum(v * ((p_z / (1 + b * p_prox_val * (1 - p_prox_val))) + (p_z_n / (1 + b * p_prox_val_n * (1 - p_prox_val_n))))) - 1 + kappa,
-        sum(v * ((p_z * (prox_resid)^2) + p_z_n * (prox_resid_n)^2)) * (b / kappa)^2 - sigma^2,
-        sum(v * ((p_z * (prox_resid)) - (p_z_n * (prox_resid_n))))
+        sum(q1 * (w2p_pos * prox_pos_resid - w2p_neg * prox_neg_resid)),
+        1 - kappa - sum(w2p_pos / (1 + b * p_prox_pos * (1 - p_prox_pos)) + w2p_neg / (1 + b * p_prox_neg * (1 - p_prox_neg))),
+        kappa^2 * sigma^2 - b^2 * sum(w2p_pos * prox_pos_resid^2 + w2p_neg * prox_neg_resid^2),
+        sum(w2p_pos * prox_pos_resid - w2p_neg * prox_neg_resid)
     )
+
+
+    ## out <- c(
+    ##     sum(v * q1 * (p_q1_pos * prox_pos_resid - p_q1_neg * prox_neg_resid)),
+    ##     sum(v * (p_q1_pos / (1 + b * p_prox_pos * (1 - p_prox_pos)) + p_q1_neg / (1 + b * p_prox_neg * (1 - p_prox_neg)))) - 1 + kappa,
+    ##     sum(v * (p_q1_pos * prox_pos_resid^2 + p_q1_neg * prox_neg_resid^2)) * (b / kappa)^2 - sigma^2,
+    ##     sum(v * (p_q1_pos * prox_pos_resid - p_q1_neg * prox_neg_resid))
+    ## )
     out
 }
 
