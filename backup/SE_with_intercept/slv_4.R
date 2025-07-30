@@ -10,7 +10,7 @@
 # app_met: approximation method
 
 
-slv_4 <- function(k, gamma, alpha, n_app, lim_opt, start, maxit, trace, app_met,coord_trasf) {
+slv_4 <- function(k, gamma, alpha, t0, n_app, lim_opt, start, maxit, trace, app_met,coord_trasf) {
   ## # library
   ##   library(nleqslv)
 
