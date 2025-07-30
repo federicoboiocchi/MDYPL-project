@@ -54,45 +54,6 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
       kappa^2 * sigma^2 - b^2 * sum(w2p * prox_resid^2))
 }
 
-## More transperent in terms of what is going on.
-##
-## mdypl_se <- function(mu, b, sigma, iota, kappa, gamma, alpha, theta0, gh = NULL, prox_tol = 1e-10) {
-##     if (is.null(gh))
-##         gh <- gauss.quad(50, kind = "hermite")
-##     xi <- gh$nodes
-##     wi <- gh$weights
-##     n_quad <- length(xi)
-##     xi1 <- rep(xi, times = n_quad)
-##     xi2 <- rep(xi, each = n_quad)
-##     w2 <- rep(wi, times = n_quad) * rep(wi, each = n_quad)
-
-##     ## Solving the fixed-point iteration using Newton Raphson (vectorized)
-##     prox <- function(x, b) {
-##         u <- 0
-##         g0 <- x - b / 2
-##         while (!all(abs(g0) < prox_tol)) {
-##             pr <- 1 / (1 + exp(-u))
-##             g0 <- x - u - b * pr
-##             u <- u + g0 / (b * pr * (1 - pr) + 1)
-##         }
-##         u
-##     }
-
-##     plogis2 <- function(x) (1 + exp(-x))^(-1)
-##     a_frac <- 0.5 * (1 + alpha)
-
-##     q1 <- sqrt(2) * gamma * xi1
-##     q2 <- sqrt(2) * (mu * gamma * xi1 + sqrt(kappa) * sigma * xi2)
-##     p_q1 <- plogis2(q1)
-##     p_prox <- plogis2(prox(q2 + a_frac * b, b))
-##     w2p <- w2 * p_q1 / pi
-##     out <- c(sum(w2p * q1 * (a_frac - p_prox)),
-##              1 - kappa - 2 * sum(w2p / (1 + b * p_prox * (1 - p_prox))),
-##              kappa^2 * sigma^2 - 2 * b^2 * sum(w2p * (a_frac - p_prox)^2))
-##     out
-## }
-
-
 
 #' Solving the MDYPL state evolution equations.
 #'

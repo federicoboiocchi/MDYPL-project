@@ -1,5 +1,5 @@
 #' Federico Boiocchi 20250729 (based on the vectorization design in the script eqns_GH2.R for MDYPL SE equations eq by Ioannis Kosmidis)
-#' Ioannis Kosmidis 20250730: various optimization improvements + ensure that
+#' Ioannis Kosmidis 20250730: various optimization improvements and bug fixes + ensure that
 #'   mdypl_se4(mu, b, sigma, 0, kappa, gamma, alpha, 0) = mdypl_se(mu, b, sigma, kappa, gamma, alpha)
 #'
 #' @param mu aggregate bias parameter.
@@ -63,6 +63,7 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
       kappa^2 * sigma^2 - b^2 * sum(w2p_pos * prox_pos_resid^2 + w2p_neg * prox_neg_resid^2),
       sum(w2p_pos * prox_pos_resid - w2p_neg * prox_neg_resid))
 }
+
 
 #' Solving the MDYPL state evolution equations.
 #'
