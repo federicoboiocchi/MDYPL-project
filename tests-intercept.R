@@ -42,3 +42,13 @@ sol_fb_vec <- solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(mu, b, sigm
 
 expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-05, check.attributes = FALSE)
 
+
+
+gh <- gauss.quad(100, kind = "hermite")
+kappa = 0.01
+alpha = 1/(1 + kappa)
+gamma = 2.0
+theta0 = 1.0
+sol_fb_vec <- solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(1.2, 0.1, 3, 1.0))
+sol_fb_vec
+

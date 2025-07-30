@@ -93,19 +93,20 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
 #'
 
 solve_mdypl_se4 <- function(kappa, gamma, alpha, intercept, start, gh = NULL, prox_tol = 1e-10, n_appx = 50, transform = TRUE, ...) {
+  no_int <- 1:3
   if (transform) {
     g <- function(pars) {
-      pars <- exp(pars)
+      pars[no_int] <- exp(pars[no_int])
       mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol, n_appx = n_appx)
     }
-    start <- log(start)
+    start[no_int] <- log(start[no_int])
   } else {
     g <- function(pars) {
       mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol, n_appx = n_appx)
     }
   }
   res <- nleqslv(start, g, ...)
-  soln <- if (transform) exp(res$x) else res$x
+  soln <- if (transform) c(exp(res$x[no_int]), res$x[4]) else res$x
   attr(soln, "funcs") <- res$fvec
   attr(soln, "iter") <- res$iter
   soln
