@@ -1,6 +1,6 @@
 #' Federico Boiocchi 20250729 (based on the vectorization design in the script eqns_GH2.R for MDYPL SE equations eq by Ioannis Kosmidis)
 #' Ioannis Kosmidis 20250730: various optimization improvements and bug fixes + ensure that
-#'   mdypl_se4(mu, b, sigma, 0, kappa, gamma, alpha, 0) = mdypl_se(mu, b, sigma, kappa, gamma, alpha)
+#'   se1(mu, b, sigma, 0, kappa, gamma, alpha, 0) = se0(mu, b, sigma, kappa, gamma, alpha)
 #'
 #' @param mu aggregate bias parameter.
 #' @param b parameter `b` in the state evolution functions.
@@ -21,7 +21,7 @@
 #' @param prox_tol tolerance for the computation of the proximal
 #'     operator; default is `1e-10`. fixed point problem solved via Newton-Raphson
 
-mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = NULL, prox_tol = 1e-10) {
+se1 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = NULL, prox_tol = 1e-10) {
     if (is.null(gh))
         gh <- gauss.quad(200, kind = "hermite")
     a_frac <- 0.5 * (1 + alpha)
@@ -48,38 +48,4 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
       1 - kappa - sum(w2p_pos / (1 + b * p_prox_pos * (1 - p_prox_pos)) + w2p_neg / (1 + b * p_prox_neg * (1 - p_prox_neg))),
       kappa^2 * sigma^2 - b^2 * sum(w2p_pos * prox_pos_resid^2 + w2p_neg * prox_neg_resid^2),
       sum(w2p_pos * prox_pos_resid - w2p_neg * prox_neg_resid))
-}
-
-
-#' Solving the MDYPL state evolution equations.
-#'
-#' @inheritParams mdypl_se4
-#' @param start starting values for `mu`, `b`,`sigma`,and `iota`.
-#' @param transform if `TRUE` (default), the optimization is with
-#'     respect to `log(mu)`, `log(b)`,`log(sigma)`, and `iota`. If
-#'     `FALSE`, then it is over `mu`, `b`, `sigma` and `iota`. The
-#'     solution is returned in terms of the latter four, regardless of
-#'     how optimization took place.
-#' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
-#' @export
-#'
-
-solve_mdypl_se4 <- function(kappa, gamma, alpha, intercept, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, ...) {
-    no_int <- 1:3
-    if (transform) {
-        g <- function(pars) {
-            pars[no_int] <- exp(pars[no_int])
-            mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol)
-        }
-        start[no_int] <- log(start[no_int])
-    } else {
-        g <- function(pars) {
-            mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol)
-        }
-    }
-    res <- nleqslv(start, g, ...)
-    soln <- if (transform) c(exp(res$x[no_int]), res$x[4]) else res$x
-    attr(soln, "funcs") <- res$fvec
-    attr(soln, "iter") <- res$iter
-    soln
 }

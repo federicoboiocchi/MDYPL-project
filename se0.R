@@ -21,7 +21,7 @@
 #'
 #' @export
 
-mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e-10) {
+se0 <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e-10) {
     if (is.null(gh))
         gh <- gauss.quad(200, kind = "hermite")
     a_frac <- 0.5 * (1 + alpha)
@@ -38,36 +38,4 @@ mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e
     c(sum(w2p * q1 * prox_resid),
       1 - kappa - sum(w2p / (1 + b * p_prox * (1 - p_prox))),
       kappa^2 * sigma^2 - b^2 * sum(w2p * prox_resid^2))
-}
-
-
-#' Solving the MDYPL state evolution equations.
-#'
-#' @inheritParams mdypl_se
-#' @param start starting values for `mu`, `b`, and `sigma`.
-#' @param transform if `TRUE` (default), the optimization is with
-#'     respect to `log(mu)`, `log(b)` and `log(sigma)`. If `FALSE`,
-#'     then it is over `mu`, `b`, `sigma`. The solution is returned in
-#'     terms of the latter three, regardless of how optimization took
-#'     place.
-#' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
-#' @export
-#'
-solve_mdypl_se <- function(kappa, gamma, alpha, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, ...) {
-    if (transform) {
-        g <- function(pars) {
-            pars <- exp(pars)
-            mdypl_se(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
-        }
-        start <- log(start)
-    } else {
-        g <- function(pars) {
-            mdypl_se2(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
-        }
-    }
-    res <- nleqslv(start, g, ...)
-    soln <- if (transform) exp(res$x) else res$x
-    attr(soln, "funcs") <- res$fvec
-    attr(soln, "iter") <- res$iter
-    soln
 }

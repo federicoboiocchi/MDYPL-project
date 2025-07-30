@@ -5,6 +5,7 @@ library("cubature")
 library("tinytest")
 library("microbenchmark")
 
+source("helper-functions.R")
 source("SE-no-intercept.R")
 source("SE-intercept.R")
 source("backup/SE_with_intercept/eq_cub4.R")
@@ -27,31 +28,34 @@ gh <- gauss.quad(50, kind = "hermite")
 microbenchmark(
     fb = eqns4(gamma, kappa, alpha, mu, b, sigma, iota, theta0, lim_opt = 100, n = 50, method = "GH", coord_trasf = TRUE),
     fb_cub = eq_cub4(gamma, kappa, alpha, mu, b, sigma, iota, theta0, lim_opt = 100, coord_trasf = TRUE),
-    fb_vec = mdypl_se4(mu, b, sigma, iota, kappa, gamma, alpha, theta0, gh = gh),
+    fb_vec = se1(mu, b, sigma, iota, kappa, gamma, alpha, theta0, gh = gh),
 times = 50)
 
 ## Benchmark optimization
 microbenchmark(
     fb = slv_4(kappa, gamma, alpha, theta0, 50, lim_opt = 1000, start = c(0.5, 2, 1, 1), maxit = 10000, trace = FALSE, app_met = "GH", coord_trasf = TRUE),
-    fb_vec = solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota)),
+    fb_vec = solve_se1(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota)),
 times = 10)
 
 ## Check equality of solutions
 sol_fb <- slv_4(kappa, gamma, alpha, theta0, 50, lim_opt = 1000, start = c(0.5, 2, 1, 1), maxit = 10000, trace = FALSE, app_met = "GH", coord_trasf = TRUE)
-sol_fb_vec <- solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota))
+sol_fb_vec <- solve_se1(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota))
 
 expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-05, check.attributes = FALSE)
 
 
+expect_equal(se0(mu, b, gamma, kappa, gamma, alpha),
+             se1(mu, b, gamma, 0, kappa, gamma, alpha, 0)[1:3])
 
-gh <- gauss.quad(100, kind = "hermite")
+
+
+## gh <- gauss.quad(100, kind = "hermite")
 ## kappa = 0.01
 ## alpha = 1/(1 + kappa)
 ## gamma = 2.0
 ## theta0 = 1.0
-sol_fb_vec <- solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(1.2, 0.1, 3, 1.0))
-sol_fb_vec
+## sol_fb_vec <- solve_se1(kappa, gamma, alpha, theta0, start = c(1.2, 0.1, 3, 1.0))
+## sol_fb_vec
 
-expect_equal(mdypl_se(mu, b, gamma, kappa, gamma, alpha),
-             mdypl_se4(mu, b, gamma, 0, kappa, gamma, alpha, 0)[1:3])
 
+solve_se(kappa, gamma, alpha, intercept = NULL, start = c(0.5, 1.0, 3))
