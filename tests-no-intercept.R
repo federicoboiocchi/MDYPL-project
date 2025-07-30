@@ -4,11 +4,10 @@ library("statmod")
 library("tinytest")
 library("microbenchmark")
 
-
-source("eqns_GH.R")
-source("eqns_GH_vec.R")
-source("eqns_GH2.R")
-source("MDYPL_slv.R")
+source("SE-no-intercept.R")
+source("backup/eqns_GH.R")
+source("backup/eqns_GH_vec.R")
+source("backup/MDYPL_slv.R")
 
 kappa <- 0.2
 gamma <- 2
@@ -21,7 +20,7 @@ sigma <- 1.8
 gh <- gauss.quad(50, kind = "hermite")
 
 ## Benchmark function evaluations
-b_fun <- microbenchmark(
+microbenchmark(
     fb = eqns_GH(mu, b, sigma, kappa, gamma, alpha, n = 50, lim_opt = 100),
     fb_vec = eqns_GH_vec(mu, b, sigma, kappa, gamma, alpha, n = 50, lim_opt = 100),
     ik_mod = mdypl_se(mu, b, sigma, kappa, gamma, alpha, gh = gh),
