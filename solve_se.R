@@ -40,7 +40,7 @@ solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
             start <- log(start)
         } else {
             g <- function(pars) {
-                se02(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
+                se0(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol)
             }
         }
     } else {
