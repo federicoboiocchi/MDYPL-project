@@ -22,6 +22,7 @@
 mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = NULL, prox_tol = 1e-10) {
     if (is.null(gh))
         gh <- gauss.quad(200, kind = "hermite")
+    a_frac <- 0.5 * (1 + alpha)
     xi <- gh$nodes
     wi <- gh$weights
     n_quad <- length(xi)
@@ -31,6 +32,7 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
 
     plogis2 <- function(x) (1 + exp(-x))^(-1)
 
+    ## Solving the fixed-point iteration using Newton Raphson (vectorized)
     prox <- function(x, b) {
         u <- 0
         g0 <- x - b / 2
@@ -50,7 +52,7 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
     zs <- mu * gamma * xi1 * sqrt2 + sqrt(kappa) * sigma * xi2 * sqrt2 + iota
     p_z <- plogis2(z)
     p_z_n <- plogis2(-z)
-    a_frac <- 0.5 * (1 + alpha)
+
 
     prox_val <- prox(a_frac * b + zs, b)
     p_prox_val <- plogis2(prox_val)
@@ -91,12 +93,12 @@ solve_mdypl_se4 <- function(kappa, gamma, alpha, intercept, start, gh = NULL, pr
     if (transform) {
         g <- function(pars) {
             pars[no_int] <- exp(pars[no_int])
-            mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol, n_appx = n_appx)
+            mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol)
         }
         start[no_int] <- log(start[no_int])
     } else {
         g <- function(pars) {
-            mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol, n_appx = n_appx)
+            mdypl_se4(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol)
         }
     }
     res <- nleqslv(start, g, ...)
