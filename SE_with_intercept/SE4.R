@@ -22,7 +22,6 @@
 
 mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = NULL, prox_tol = 1e-10, n_appx = 50) {
   if (is.null(gh)) {
-    library(statmod)
     gh <- gauss.quad(n_appx, kind = "hermite")
   }
 
