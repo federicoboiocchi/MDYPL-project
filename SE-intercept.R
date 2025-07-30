@@ -33,27 +33,13 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
     q2 <- mu * q1n + rep(sqrt(2 * kappa) * sigma * xi + iota, each = n_quad)
     w2 <- rep(wi, times = n_quad) * rep(wi, each = n_quad)
 
-    plogis2 <- function(x) (1 + exp(-x))^(-1)
-
-    ## Solving the fixed-point iteration using Newton Raphson (vectorized)
-    prox <- function(x, b) {
-        u <- 0
-        g0 <- x - b / 2
-        while (!all(abs(g0) < prox_tol)) {
-            pr <- plogis2(u)
-            g0 <- x - u - b * pr
-            u <- u + g0 / (b * pr * (1 - pr) + 1)
-        }
-        u
-    }
-
     p_q1_pos <- plogis2(q1)
     w2pi <- w2 / pi
     w2p_pos <- w2pi * p_q1_pos
     w2p_neg <- w2pi - w2p_pos
 
-    p_prox_pos <- plogis2(prox(a_frac * b + q2, b))
-    p_prox_neg <- plogis2(prox(a_frac * b - q2, b))
+    p_prox_pos <- plogis2(prox(a_frac * b + q2, b, prox_tol))
+    p_prox_neg <- plogis2(prox(a_frac * b - q2, b, prox_tol))
 
     prox_pos_resid <- a_frac - p_prox_pos
     prox_neg_resid <- a_frac - p_prox_neg
