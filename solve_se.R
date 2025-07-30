@@ -29,7 +29,7 @@
 #'     optimization took place.
 #' @param trust_iter how many iterations of `trust::trust()` should we
 #'     make to get starting values for `nleqslv::nleqslv()`? Default
-#'     is `5`, but can also be `0` in which case `start` is directly
+#'     is `2`, but can also be `0` in which case `start` is directly
 #'     passed to `nleqslv:nleqslv()`.
 #' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
 #'
@@ -41,7 +41,7 @@
 #' a more aggressive iteration.
 #' 
 #' @export
-solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, trust_iter = 5, ...) {
+solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, trust_iter = 2, ...) {
     if (trust_iter > 0) {
         start <- trust_se(kappa, gamma, alpha, intercept, start, gh, prox_tol, iterlim = trust_iter)
     }

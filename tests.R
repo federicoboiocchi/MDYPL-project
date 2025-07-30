@@ -1,5 +1,6 @@
 library("tinytest")
 library("nleqslv")
+library("trust")
 library("statmod")
 library("cubature")
 
