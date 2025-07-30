@@ -41,18 +41,3 @@ sol_ik_mod <- solve_mdypl_se(kappa, gamma, alpha, start = c(mu, b, sigma))
 
 expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-06)
 expect_equal(sol_fb, sol_ik_mod, tolerance = 1e-06, check.attributes = FALSE)
-
-
-kappa <- 0.01
-gamma <- 2
-alpha <- 1 / 1.01
-start <- c(1, 0.4, 1.0)
-
-start <-  c(0.987478287740242, 0.06670651204405294, 2.55374626795934)
-
-sol_fb <- MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = start, maxi = 10000, trace = FALSE, app_met = "GH", opt_met = "nleqslv")
-sol_fb_vec <- MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = start, maxi = 10000, trace = FALSE, app_met = "GH-vec", opt_met = "nleqslv")
-sol_ik_mod <- solve_mdypl_se(kappa, gamma, alpha, start = start + 0.5, gh = gh, transform = TRUE)
-
-gh <- gauss.quad(150, kind = "hermite")
-mdypl_se(start[1], start[2], start[3], kappa, gamma, alpha, gh)
