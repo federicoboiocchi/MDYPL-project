@@ -14,7 +14,7 @@ source("backup/SE_with_intercept/eq_cub4.R")
 source("backup/SE_with_intercept/eqns4.R")
 source("backup/SE_with_intercept/slv_4.R")
 
-n_quad <- 100
+n_quad <- 50
 gh <- gauss.quad(n_quad, kind = "hermite")
 
 ## Without intercept
@@ -36,7 +36,7 @@ times = 50)
 microbenchmark(
     fb = MDYPL_slv(kappa, gamma, alpha, n_quad, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH", opt_met = "nleqslv"),
     fb_vec = MDYPL_slv(kappa, gamma, alpha, n_quad, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH-vec", opt_met = "nleqslv"),
-    ik_mod = solve_se(kappa, gamma, alpha, start = c(mu, b, sigma)),
+    ik_mod = solve_se(kappa, gamma, alpha, start = c(mu, b, sigma), gh = gh),
     times = 10)
 
 
@@ -50,11 +50,11 @@ microbenchmark(
     fb = eqns4(gamma, kappa, alpha, mu, b, sigma, iota, theta0, lim_opt = 100, n = n_quad, method = "GH", coord_trasf = TRUE),
     fb_cub = eq_cub4(gamma, kappa, alpha, mu, b, sigma, iota, theta0, lim_opt = 100, coord_trasf = TRUE),
     fb_vec = se1(mu, b, sigma, iota, kappa, gamma, alpha, theta0, gh = gh),
-    times = 50)
+    times = 10)
 
 
 ## Benchmark optimization
 microbenchmark(
-    fb = slv_4(kappa, gamma, alpha, theta0, n_quad, lim_opt = 1000, start = c(0.5, 2, 1, 1), maxit = 10000, trace = FALSE, app_met = "GH", coord_trasf = TRUE),
-    fb_vec = solve_se(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota)),
+    fb = slv_4(kappa, gamma, alpha, theta0, n_quad, lim_opt = 1000, start = c(mu, b, sigma, iota), maxit = 10000, trace = FALSE, app_met = "GH", coord_trasf = TRUE),
+    fb_vec = solve_se(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota), gh = gh),
     times = 10)

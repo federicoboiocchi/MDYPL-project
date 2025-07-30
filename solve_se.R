@@ -73,3 +73,58 @@ solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
     attr(soln, "iter") <- res$iter
     soln
 }
+
+
+
+
+trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, ...) {
+    ssq <- function(x) sum(x^2)
+    no_intercept <- is.null(intercept)
+    if (no_intercept) {
+        npars <- 3
+        g <- function(pars) {
+            pars <- exp(pars)
+            se0(mu = pars[1], b = pars[2], sigma = pars[3], kappa = kappa, gamma = gamma, alpha = alpha, gh = gh, prox_tol = prox_tol) |> ssq()
+        }
+        start <- log(start)
+    } else {
+        npars <- 4
+        stopifnot(length(start) == 4)
+        no_int <- 1:3
+        g <- function(pars) {
+            pars[no_int] <- exp(pars[no_int])
+            se1(mu = pars[1], b = pars[2], sigma = pars[3], iota = pars[4], kappa = kappa, gamma = gamma, alpha = alpha, intercept = intercept, gh = gh, prox_tol = prox_tol) |> ssq()
+        }
+        start[no_int] <- log(start[no_int])
+    }
+
+    h <- matrix(0, npars, npars)
+    upp_inds <- upper.tri(h, diag = TRUE)
+    low_inds <- lower.tri(h, diag = TRUE)
+    
+    vec2mat <- function(vec, d) {
+        h <- matrix(NA, npars, npars)
+        h[upp_inds] <- vec
+        h[low_inds] <- t(h)[low_inds]
+        h
+    }
+
+    obj <- function(pars) {
+        v <- numDeriv::genD(g, pars)        
+        list(value = v$f0,
+             gradient = v$D[1:npars],
+             hessian = vec2mat(v$D[-c(1:npars)]))
+    }
+    
+    res <- trust(obj, start, rinit = 1, rmax = 5, ...) 
+
+    if (no_intercept) {
+        soln <- exp(res$argument)
+    } else {
+        soln <- c(exp(res$argument[no_int]), res$argument[4])
+    }
+
+    attr(soln, "objective") <- res$value
+    attr(soln, "iter") <- res$iterations
+    soln
+}
