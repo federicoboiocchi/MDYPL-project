@@ -62,7 +62,7 @@ julia_command("
 ")
 
 Jsol1 <- julia_eval("Jsol1")
-Rsol1 <- solve_se(kappa, gamma, alpha, theta0, start = c(0.8, 0.1, 1, 1), transform = FALSE)
+Rsol1 <- solve_se(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota), transform = FALSE)
 expect_equal(Jsol1, Rsol1, tolerance = 1e-07, check.attributes = FALSE)
 
 

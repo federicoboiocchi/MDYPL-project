@@ -1,3 +1,5 @@
+## Ioannis Kosmidis, 20250731
+
 #' Solve the MDYPL state evolution equations with or without intercept.
 #'
 #' #' @param mu aggregate bias parameter.
@@ -25,10 +27,29 @@
 #'     `sigma` (and `iota` if `intercept` is numeric). The solution is
 #'     returned in terms of the latter set, regardless of how
 #'     optimization took place.
+#' @param trust_iter how many iterations of `trust::trust()` should we
+#'     make to get starting values for `nleqslv::nleqslv()`? Default
+#'     is `5`, but can also be `0` in which case `start` is directly
+#'     passed to `nleqslv:nleqslv()`.
 #' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
-#' @export
 #'
-solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, ...) {
+#' @details
+#'
+#' `trust_iter` iterations of `trust::trust()` are used towards
+#' minimizing `sum(se)^2`, where se is a vector of the state evolution
+#' functions. The solution is then passed to `nleqslv::nleqslv()` for
+#' a more aggressive iteration.
+#' 
+#' @export
+solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, trust_iter = 5, ...) {
+    if (trust_iter > 0) {
+        start <- trust_se(kappa, gamma, alpha, intercept, start, gh, prox_tol, iterlim = trust_iter)
+    }
+    nleqslv_se(kappa, gamma, alpha, intercept, start, gh, prox_tol, transform, ...)
+}
+
+
+nleqslv_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, ...) {
     no_intercept <- is.null(intercept)
     if (no_intercept) {
         stopifnot(length(start) == 3)
@@ -58,7 +79,6 @@ solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
             }
         }
     }
-
     res <- nleqslv(start, g, ...)
     if (transform) {
         if (no_intercept) {
@@ -73,9 +93,6 @@ solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
     attr(soln, "iter") <- res$iter
     soln
 }
-
-
-
 
 trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, ...) {
     ssq <- function(x) sum(x^2)
