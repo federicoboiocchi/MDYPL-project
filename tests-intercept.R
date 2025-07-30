@@ -5,39 +5,40 @@ library("cubature")
 library("tinytest")
 library("microbenchmark")
 
+source("SE-no-intercept.R")
 source("SE-intercept.R")
 source("backup/SE_with_intercept/eq_cub4.R")
-source("backup/eqns_GH_vec.R")
-source("backup/MDYPL_slv.R")
+source("backup/SE_with_intercept/eqns4.R")
+source("backup/SE_with_intercept/slv_4.R")
 
 kappa <- 0.2
 gamma <- 2
 alpha <- 1 / (1 + kappa)
+theta0 <- 1
 
 mu <- 0.4
 b <- 5.1
 sigma <- 1.8
+iota <- 2
 
 gh <- gauss.quad(50, kind = "hermite")
 
 ## Benchmark function evaluations
 microbenchmark(
-    fb = eqns_GH(mu, b, sigma, kappa, gamma, alpha, n = 50, lim_opt = 100),
-    fb_vec = eqns_GH_vec(mu, b, sigma, kappa, gamma, alpha, n = 50, lim_opt = 100),
-    ik_mod = mdypl_se(mu, b, sigma, kappa, gamma, alpha, gh = gh),
+    fb = eqns4(gamma, kappa, alpha, mu, b, sigma, iota, theta0, lim_opt = 100, n = 50, method = "GH", coord_trasf = TRUE),
+    fb_cub = eq_cub4(gamma, kappa, alpha, mu, b, sigma, iota, theta0, lim_opt = 100, coord_trasf = TRUE),
+    fb_vec = mdypl_se4(mu, b, sigma, iota, kappa, gamma, alpha, theta0, gh = gh),
 times = 50)
 
 ## Benchmark optimization
 microbenchmark(
-    fb = MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH", opt_met = "nleqslv"),
-    fb_vec = MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH-vec", opt_met = "nleqslv"),
-    ik_mod = solve_mdypl_se(kappa, gamma, alpha, start = c(mu, b, sigma)),
+    fb = slv_4(kappa, gamma, alpha, theta0, 50, lim_opt = 1000, start = c(0.5, 2, 1, 1), maxit = 10000, trace = FALSE, app_met = "GH", coord_trasf = TRUE),
+    fb_vec = solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota)),
 times = 10)
 
 ## Check equality of solutions
-sol_fb <- MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH", opt_met = "nleqslv")
-sol_fb_vec <- MDYPL_slv(kappa, gamma, alpha, 50, lim_opt = 1000, start = c(0.5, 2, 1), maxi = 10000, trace = FALSE, app_met = "GH-vec", opt_met = "nleqslv")
-sol_ik_mod <- solve_mdypl_se(kappa, gamma, alpha, start = c(mu, b, sigma))
+sol_fb <- slv_4(kappa, gamma, alpha, theta0, 50, lim_opt = 1000, start = c(0.5, 2, 1, 1), maxit = 10000, trace = FALSE, app_met = "GH", coord_trasf = TRUE)
+sol_fb_vec <- solve_mdypl_se4(kappa, gamma, alpha, theta0, start = c(mu, b, sigma, iota))
 
-expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-06)
-expect_equal(sol_fb, sol_ik_mod, tolerance = 1e-06, check.attributes = FALSE)
+expect_equal(sol_fb, sol_fb_vec, tolerance = 1e-05, check.attributes = FALSE)
+
