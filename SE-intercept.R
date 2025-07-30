@@ -15,14 +15,13 @@
 #' @param gh A list with the Gauss-Hermite quadrature nodes and
 #'     nweights, as returned from `statmod::gauss.quad()` with `kind =
 #'     "hermite"`. Default is `NULL`, in which case `gh` is set to
-#'     `statmod::gauss.quad(n_appx, kind = "hermite")` is used.
+#'     `statmod::gauss.quad(200, kind = "hermite")` is used.
 #' @param prox_tol tolerance for the computation of the proximal
 #'     operator; default is `1e-10`. fixed point problem solved via Newton-Raphson
-#' @param n_appx number of Gauss-Hermite nodes used
 
-mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = NULL, prox_tol = 1e-10, n_appx = 50) {
+mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = NULL, prox_tol = 1e-10) {
   if (is.null(gh)) {
-    gh <- gauss.quad(n_appx, kind = "hermite")
+    gh <- gauss.quad(200, kind = "hermite")
   }
 
   xi <- gh$nodes
@@ -84,15 +83,15 @@ mdypl_se4 <- function(mu, b, sigma, iota, kappa, gamma, alpha, intercept, gh = N
 #' @inheritParams mdypl_se4
 #' @param start starting values for `mu`, `b`,`sigma`,and `iota`.
 #' @param transform if `TRUE` (default), the optimization is with
-#'     respect to `log(mu)`, `log(b)`,`log(sigma)`,and `log(iota)`. If `FALSE`,
-#'     then it is over `mu`, `b`, `sigma` and `iota`. The solution is returned in
-#'     terms of the latter four, regardless of how optimization took
-#'     place.
+#'     respect to `log(mu)`, `log(b)`,`log(sigma)`, and `iota`. If
+#'     `FALSE`, then it is over `mu`, `b`, `sigma` and `iota`. The
+#'     solution is returned in terms of the latter four, regardless of
+#'     how optimization took place.
 #' @param ... further arguments to be passed to `nleqslv::nleqslv()`.
 #' @export
 #'
 
-solve_mdypl_se4 <- function(kappa, gamma, alpha, intercept, start, gh = NULL, prox_tol = 1e-10, n_appx = 50, transform = TRUE, ...) {
+solve_mdypl_se4 <- function(kappa, gamma, alpha, intercept, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, ...) {
   no_int <- 1:3
   if (transform) {
     g <- function(pars) {

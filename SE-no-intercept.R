@@ -15,7 +15,7 @@
 #' @param gh A list with the Gauss-Hermite quadrature nodes and
 #'     nweights, as returned from `statmod::gauss.quad()` with `kind =
 #'     "hermite"`. Default is `NULL`, in which case `gh` is set to
-#'     `statmod::gauss.quad(50, kind = "hermite")` is used.
+#'     `statmod::gauss.quad(200, kind = "hermite")` is used.
 #' @param prox_tol tolerance for the computation of the proximal
 #'     operator; default is `1e-10`.
 #'
@@ -23,7 +23,7 @@
 
 mdypl_se <- function(mu, b, sigma, kappa, gamma, alpha, gh = NULL, prox_tol = 1e-10) {
     if (is.null(gh))
-        gh <- gauss.quad(50, kind = "hermite")
+        gh <- gauss.quad(200, kind = "hermite")
     a_frac <- 0.5 * (1 + alpha)
     xi <- gh$nodes
     wi <- gh$weights
