@@ -1,19 +1,19 @@
 # 4 equations non linear system with intercept
 
-rm(list = ls())
+## rm(list = ls())
 
-n <- 60 # number of nodes for GH cubature
-mu <- 2
-b <- 1
-sigma <- 3
-iota <- 1.7
-t0 <- 1.1
+## n <- 60 # number of nodes for GH cubature
+## mu <- 2
+## b <- 1
+## sigma <- 3
+## iota <- 1.7
+## t0 <- 1.1
 
-lim_opt <- 1000 # boundary for the optimization problem that computes the proximal operator  
+## lim_opt <- 1000 # boundary for the optimization problem that computes the proximal operator
 
-gamma <- 4
-k <- 0.3
-alpha <- 1 / (1 + k)
+## gamma <- 4
+## k <- 0.3
+## alpha <- 1 / (1 + k)
 
 # coord_trasf: TRUE or FALSE , it performs an additional change of variables in order to integrate over [0,1]x[0,1] instead
 # of R^2 (if combined with method="GH" it doesn't have any effect). It should be used with method="cub"
@@ -24,7 +24,7 @@ alpha <- 1 / (1 + k)
 
 
 eqns4 <- function(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf, method, n) {
-  
+
   # inverse link function
   link <- function(x) {
     1 / (1 + exp(-x))
@@ -35,7 +35,7 @@ eqns4 <- function(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf,
     exp(x) / ((1 + exp(x))^2)
   }
 
-  # proximal operator 
+  # proximal operator
   prox <- function(x, b) {
     f <- function(u) {
       b * log(1 + exp(u)) + (1 / 2) * (x - u)^2
@@ -74,9 +74,9 @@ eqns4 <- function(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf,
   }
 
   # h: function to integrate for "cub" or to integrate numerically via "GH"
-  
+
   h <- function(x, y, pos) {
-    
+
     jac <- 1
 
     z <- x
@@ -160,5 +160,5 @@ eqns4 <- function(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf,
   }
 }
 
-eqns4(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf = FALSE, method = "GH", n)
+## eqns4(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf = FALSE, method = "GH", n)
 

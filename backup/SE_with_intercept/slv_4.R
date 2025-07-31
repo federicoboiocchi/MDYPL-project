@@ -10,17 +10,17 @@
 # app_met: approximation method
 
 
-slv_4 <- function(k, gamma, alpha, n_app, lim_opt, start, maxit, trace, app_met,coord_trasf) {
-  # library
-    library(nleqslv)
-  
+slv_4 <- function(k, gamma, alpha, t0, n_app, lim_opt, start, maxit, trace, app_met,coord_trasf) {
+  ## # library
+  ##   library(nleqslv)
+
   # select the approx method
   eqn_func <- switch(app_met,
                      "cub" = function(mu, b, sigma, iota) eqns4(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf, method="cub", n_app),
                      "GH"  = function(mu, b, sigma, iota) eqns4(gamma, k, alpha, mu, b, sigma, iota, t0, lim_opt, coord_trasf, method="GH", n_app),
                      stop("Invalid approximation method")
   )
-  
+
   # objective function
   f <- function(par) {
     mu <- par[1]
@@ -30,7 +30,7 @@ slv_4 <- function(k, gamma, alpha, n_app, lim_opt, start, maxit, trace, app_met,
     out <- eqn_func(mu, b, sigma,iota)
     return(out)
   }
-  
+
   control_list <- list(trace = trace, maxit = maxit)
   solution<- nleqslv(start, f, control = control_list)$x
   return(solution)
