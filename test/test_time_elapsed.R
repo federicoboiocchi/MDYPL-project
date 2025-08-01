@@ -4,16 +4,16 @@ rm(list=ls())
 
 # Time elapsed comparison
 
-source("C://Users//andre//Downloads//se1.R")
-source("C://Users//andre//Downloads//solve_se.R")
-source("C://Users//andre//Downloads//se0.R")
-source("C://Users//andre//Downloads//helper-functions.R")
+#source("C://Users//andre//Downloads//se1.R")
+#source("C://Users//andre//Downloads//solve_se.R")
+#source("C://Users//andre//Downloads//se0.R")
+#source("C://Users//andre//Downloads//helper-functions.R")
 
-library("trust")
-library("statmod")
-library("nleqslv")
-library("tictoc")
-library("viridis")
+#library("trust")
+#library("statmod")
+#library("nleqslv")
+#library("tictoc")
+#library("viridis")
 
 # defining the grids
 
