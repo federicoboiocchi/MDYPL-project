@@ -39,7 +39,7 @@
 #' minimizing `sum(se)^2`, where se is a vector of the state evolution
 #' functions. The solution is then passed to `nleqslv::nleqslv()` for
 #' a more aggressive iteration.
-#' 
+#'
 #' @export
 solve_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = TRUE, trust_iter = 2, ...) {
     if (trust_iter > 0) {
@@ -91,10 +91,12 @@ nleqslv_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, 
     }
     attr(soln, "funcs") <- res$fvec
     attr(soln, "iter") <- res$iter
+    attr(soln, "message") <- res$message
+    attr(soln, "nleqslv_termination_code") <- res$termcd
     soln
 }
 
-trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, ...) {
+trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, prox_tol = 1e-10, transform = FALSE, ...) {
     ssq <- function(x) sum(x^2)
     no_intercept <- is.null(intercept)
     if (no_intercept) {
@@ -118,7 +120,7 @@ trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
     h <- matrix(0, npars, npars)
     upp_inds <- upper.tri(h, diag = TRUE)
     low_inds <- lower.tri(h, diag = TRUE)
-    
+
     vec2mat <- function(vec, d) {
         h <- matrix(NA, npars, npars)
         h[upp_inds] <- vec
@@ -127,13 +129,13 @@ trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
     }
 
     obj <- function(pars) {
-        v <- numDeriv::genD(g, pars)        
+        v <- numDeriv::genD(g, pars)
         list(value = v$f0,
              gradient = v$D[1:npars],
              hessian = vec2mat(v$D[-c(1:npars)]))
     }
-    
-    res <- trust(obj, start, rinit = 1, rmax = 5, ...) 
+
+    res <- trust(obj, start, rinit = 1, rmax = 5, ...)
 
     if (no_intercept) {
         soln <- exp(res$argument)
