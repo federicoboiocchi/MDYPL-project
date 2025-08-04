@@ -143,6 +143,7 @@ trust_se <- function(kappa, gamma, alpha, intercept = NULL, start, gh = NULL, pr
         soln <- c(exp(res$argument[no_int]), res$argument[4])
     }
 
+    attr(soln, "gradient") <- res$gradient
     attr(soln, "objective") <- res$value
     attr(soln, "iter") <- res$iterations
     soln
