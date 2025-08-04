@@ -1,21 +1,15 @@
 # Tests
-## rm(list=ls())
+
 # No intercept case
 
-# Time elapsed comparison
+# Testing solve_se, nleqslv_se, trust_se over a grid of kappa, gamma, alpha (1/(1+kappa)) values
 
-#source("C://Users//andre//Downloads//se1.R")
-#source("C://Users//andre//Downloads//solve_se.R")
-#source("C://Users//andre//Downloads//se0.R")
-#source("C://Users//andre//Downloads//helper-functions.R")
+# recorded measurements: 
 
-#library("trust")
-#library("statmod")
-#library("nleqslv")
-#library("tictoc")
-#library("viridis")
-
-## defining the grids
+# times = solution time elapsed, 
+# se_parameters = estimates (mu*, b*, sigma*),
+# gradients = objective function values (f(mu*),f(b*),f(sigma*)) expected to be approx. zeros
+# solv = solver used = solve_se, trust_se or nleqslv_se 
 
 library("tinytest")
 library("tictoc")
@@ -84,3 +78,5 @@ results <- rbind(results_nleqslv,
 expect_equal(max(abs(results$f_b)), 0, tolerance = 1e-08)
 expect_equal(max(abs(results$f_mu)), 0, tolerance = 1e-08)
 expect_equal(max(abs(results$f_sigma)), 0, tolerance = 1e-08)
+
+write.csv(results, "df_test_R")
