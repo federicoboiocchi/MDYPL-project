@@ -94,24 +94,3 @@ ggplot(results) +
     geom_histogram(aes(elapsed)) +
     facet_grid(I(kappa > 0.5) ~ solver) +
     theme_minimal()
-
-
-
-### Analysis
-
-times_matrix <- matrix(data=times,ncol=size,nrow=size)
-
-filled.contour(k, g, times_matrix,
-               color.palette = viridis,
-               xlab = "kappa", ylab = "gamma",
-               main = "Elapsed time")
-
-times_julia <- read.csv("times_j.csv")$times
-
-times_julia_mat <- matrix(data=times_julia,ncol=size,nrow=size)
-
-filled.contour(k, g, times_julia_mat,
-               color.palette = viridis,
-               xlab = "kappa", ylab = "gamma",
-               main = "Elapsed time (julia)")
-
