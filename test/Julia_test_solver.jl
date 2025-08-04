@@ -63,7 +63,7 @@ function est_pars(kappa,gamma,alpha,start,solver)
         end
     end
 mat_tot = hcat(kappa,gamma,alpha,times,se_parameters,gradients,slv)   
-df_tot = DataFrame(mat_tot,[:kappa, :gamma, :alpha, :times, :mu, :b, :sigma, :f_mu, :f_b, :f_sigma, :solv])
+df_tot = DataFrame(mat_tot,[:kappa, :gamma, :alpha, :times, :mu, :b, :sigma, :f_mu, :f_b, :f_sigma, :solver])
 return df_tot
 end
 
@@ -72,6 +72,7 @@ df_newton = est_pars(kappa,gamma,alpha,start,"Newton")
 
 df_test = vcat(df_trust,df_newton)
 CSV.write("df_test_julia",df_test)
+
 
 
 
