@@ -84,13 +84,3 @@ results <- rbind(results_nleqslv,
 expect_equal(max(abs(results$f_b)), 0, tolerance = 1e-08)
 expect_equal(max(abs(results$f_mu)), 0, tolerance = 1e-08)
 expect_equal(max(abs(results$f_sigma)), 0, tolerance = 1e-08)
-
-ggplot(results) +
-    geom_histogram(aes(elapsed)) +
-    facet_grid(~ solver) +
-    theme_minimal()
-
-ggplot(results) +
-    geom_histogram(aes(elapsed)) +
-    facet_grid(I(kappa > 0.5) ~ solver) +
-    theme_minimal()
