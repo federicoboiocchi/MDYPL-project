@@ -1,3 +1,5 @@
+# Federico Boiocchi (782025)
+
 # test-solve_se.R
 
 project_path <- "C:/Users/andre/Documents/brglm2/R"
@@ -149,4 +151,5 @@ mu <- dfR$mu;b <- dfR$b;sigma<-dfR$sigma
 aMSE <- (sigma)^2+((1-mu)^2)*(((gamma)^2)/kappa)
 rMSE <- matrix(sqrt(aMSE),size,size)
 contour_plot(k,g,rMSE, "nleqslv_se and optim()",expression("root aMSE"==sigma["*"]^2+(1-mu["*"])^2*gamma^2/k))
+
 
