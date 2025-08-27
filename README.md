@@ -19,12 +19,12 @@ A possible way to approach image recognition consists of using
 allows to model a transformation of the conditional expected value of a
 binary response $y$ with a linear combination of explanatory variables
 $\mathbf{X}\boldsymbol{\beta}$: 
+
 $$
 \text{responses sample}\quad (y_1,\dots,y_n)\sim \text{Ber}(\mu_i)\quad\text{with}\ i=1,\dots,n\quad \text{and}\ \underset{n \times p}{\mathbf{X}}\\
 \mathbb{E}[Y_i\ |\ \mathbf{x}_i^\top]=\mu_i=g^{-1}(\mathbf{x}_i^\top\boldsymbol{\beta})\quad\text{with}\ g^{-1}(\cdot)=\frac{\text{exp}(\cdot)}{1+\text{exp}(\cdot)}
 $$
-![Equation](https://latex.codecogs.com/png.latex?\text{responses sample}\quad (y_1,\dots,y_n)\sim \text{Ber}(\mu_i)\quad\text{with}\ i=1,\dots,n\quad \text{and}\ \underset{n \times p}{\mathbf{X}}\\
-\mathbb{E}[Y_i\ |\ \mathbf{x}_i^\top]=\mu_i=g^{-1}(\mathbf{x}_i^\top\boldsymbol{\beta})\quad\text{with}\ g^{-1}(\cdot)=\frac{\text{exp}(\cdot)}{1+\text{exp}(\cdot)})
+
 Differently from black box algorithms, two main advantages of such
 method are the statistical interpretability of the quantities involved,
 and a well developed inferential theory related for model parameters. In
@@ -1026,6 +1026,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
