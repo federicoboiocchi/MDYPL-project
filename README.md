@@ -96,7 +96,7 @@ dataset is the following:
   $$
   f(x,y)=\underset{u,v}{\sum}C(u,v)e^{i2\pi\left(\displaystyle\frac{ux}{M}+\frac{vy}{N}\right)} 
   $$
-
+  
   This is also known as fourier decomposition of an image.
 - **Binary response**: a label taking value either 0 or 1, indicating
   whether the image contains a specific, arbitrarily chosen digit. Since
@@ -1054,6 +1054,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
