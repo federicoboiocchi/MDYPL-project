@@ -937,9 +937,11 @@ sigma <- se_pars[3]
 ```
 
 we have adjusted the classical penalized likelihood ratio test
-statistics according to the following result: $$
-2\Lambda_{I}\overset{d}{\longrightarrow}\frac{k\sigma^2_{*}}{b_{*}}\chi^2_k
-$$ Consequently we are able to compute a new adjusted `p-value` to
+statistics according to the following result: 
+
+$$2\Lambda_{I}\overset{d}{\longrightarrow}\frac{k\sigma^2_{\*}}{b_{\*}}\chi^2_k$$ 
+
+Consequently we are able to compute a new adjusted `p-value` to
 perform the same hypothesis test as before
 
 ``` r
@@ -1052,6 +1054,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
