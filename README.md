@@ -815,11 +815,11 @@ anticipate from empirical observation, the classifier has difficulties
 distinguishing between the digits 7, 4, and 1, due to their strong
 similarity in handwritten form. We also observe that performance
 improves when the regression coefficients are rescaled according to the
-solution of the SE system $(\mu_{*},b_{*},\sigma_{*},\theta_{0*})$. The
+solution of the SE system $(\mu_{\*},b_{\*},\sigma_{\*},\theta_{0*})$. The
 corrected estimates are defined as follows:
 
 $$
-\widehat{\boldsymbol{\beta}}^{\text{RES}}_{\text{DY}}= \frac{\widehat{\boldsymbol{\beta}}_{\text{DY}}}{\mu_{*}}
+\hat{\beta_{DY}}^{RES}= \frac{\hat{\beta_{DY}}}{\mu_{\*}}
 $$
 
 where the nonlinear system is the one specified in section 6 of [P.
@@ -1052,6 +1052,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
