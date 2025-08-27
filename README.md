@@ -398,9 +398,9 @@ mod_fk <- glm(y_tr ~ X_tr_std, family = binomial(), method = "mdyplFit")
 
 In low-dimensional setting when the high dimensional correction
 (`hd_correction`) is not required,
-$\widehat{\boldsymbol{\beta}}_{\text{DY}}$ behaves as a ML estimator and
+$\hat{\beta_DY}$ behaves as a ML estimator and
 therefore the quantities in the `summary` above such as
-$\text{SE}(\widehat{\boldsymbol{\beta}}_{\text{DY}})$ the z values and
+$\text{SE}(\hat{{\beta}}_{\text{DY}})$ the z values and
 the p-values are computed in the classical way. On the contrary the
 summary will be different when including the `hd_correction`.
 
@@ -1052,6 +1052,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
