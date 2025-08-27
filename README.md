@@ -232,6 +232,8 @@ explanatory variables. An intercept is also included in the model.
 mod_fk <- glm(y_tr ~ X_tr_std, family = binomial(), method = "mdyplFit") 
 # summary of the object of class glm with method = mdyplFit
 (summ_fk <- summary(mod_fk))
+s <- capture.output(summ_fk)
+(c(s[1:18],"...",s[147:162]))
 #> 
 #> Call:
 #> glm(formula = y_tr ~ X_tr_std, family = binomial(), method = "mdyplFit")
@@ -1053,6 +1055,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
