@@ -237,44 +237,44 @@ cat(head(s, 18), sep = "\n")
 cat("...\n")
 cat(tail(s, 20), sep = "\n")
 
-Call:
-glm(formula = y_tr ~ X_tr_std, family = binomial(), method = "mdyplFit")
+#> Call:
+#> glm(formula = y_tr ~ X_tr_std, family = binomial(), method = "mdyplFit")
+#>
+#> Deviance Residuals: 
+#>    Min       1Q   Median       3Q      Max  
+#> -0.9399  -0.4174  -0.3341  -0.2480   0.9397  
+#>
+#> Coefficients:
+#>                Estimate Std. Error z value Pr(>|z|)    
+#> (Intercept)   -2.3491346  0.1320712 -17.787   <2e-16 ***
+#> X_tr_stdfou1   0.2242358  0.2802190   0.800    0.424    
+#> X_tr_stdfou2  -0.0901030  0.3427133  -0.263    0.793    
+#> X_tr_stdfou3   0.3029658  0.2608591   1.161    0.245    
+#> X_tr_stdfou4   0.1842861  0.2032689   0.907    0.365    
+#> X_tr_stdfou5  -0.1464839  0.3770292  -0.389    0.698    
+#> X_tr_stdfou6  -0.1639585  0.2422420  -0.677    0.499    
+#> X_tr_stdfou7   0.0921854  0.3402478   0.271    0.786    
+#> ...
+#> X_tr_stdkar56  0.0465789  0.1880955   0.248    0.804    
+#> X_tr_stdkar57 -0.0315085  0.1871347  -0.168    0.866    
+#> X_tr_stdkar58  0.0273410  0.1878315   0.146    0.884    
+#> X_tr_stdkar59  0.1445634  0.1629674   0.887    0.375    
+#> X_tr_stdkar60 -0.0591732  0.1926804  -0.307    0.759    
+#> X_tr_stdkar61 -0.0551500  0.1658793  -0.332    0.740    
+#> X_tr_stdkar62 -0.0077934  0.1722651  -0.045    0.964    
+#> X_tr_stdkar63  0.0187850  0.1668718   0.113    0.910    
+#> X_tr_stdkar64 -0.0006928  0.1650868  -0.004    0.997    
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#>
+#> (Dispersion parameter for binomial family taken to be 1)
 
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.9399  -0.4174  -0.3341  -0.2480   0.9397  
-
-Coefficients:
-                Estimate Std. Error z value Pr(>|z|)    
-(Intercept)   -2.3491346  0.1320712 -17.787   <2e-16 ***
-X_tr_stdfou1   0.2242358  0.2802190   0.800    0.424    
-X_tr_stdfou2  -0.0901030  0.3427133  -0.263    0.793    
-X_tr_stdfou3   0.3029658  0.2608591   1.161    0.245    
-X_tr_stdfou4   0.1842861  0.2032689   0.907    0.365    
-X_tr_stdfou5  -0.1464839  0.3770292  -0.389    0.698    
-X_tr_stdfou6  -0.1639585  0.2422420  -0.677    0.499    
-X_tr_stdfou7   0.0921854  0.3402478   0.271    0.786    
-...
-X_tr_stdkar56  0.0465789  0.1880955   0.248    0.804    
-X_tr_stdkar57 -0.0315085  0.1871347  -0.168    0.866    
-X_tr_stdkar58  0.0273410  0.1878315   0.146    0.884    
-X_tr_stdkar59  0.1445634  0.1629674   0.887    0.375    
-X_tr_stdkar60 -0.0591732  0.1926804  -0.307    0.759    
-X_tr_stdkar61 -0.0551500  0.1658793  -0.332    0.740    
-X_tr_stdkar62 -0.0077934  0.1722651  -0.045    0.964    
-X_tr_stdkar63  0.0187850  0.1668718   0.113    0.910    
-X_tr_stdkar64 -0.0006928  0.1650868  -0.004    0.997    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 618.85  on 999  degrees of freedom
-Residual deviance: 159.10  on 859  degrees of freedom
-AIC:  663.69
-
-Type of estimator: MPL_DY (maximum Diaconis-Ylvisaker prior penalized likelihood) with alpha = 0.88
-Number of Fisher Scoring iterations: 6
+#> Null deviance: 618.85  on 999  degrees of freedom
+#> Residual deviance: 159.10  on 859  degrees of freedom
+#> AIC:  663.69
+#>
+#> Type of estimator: MPL_DY (maximum Diaconis-Ylvisaker prior penalized likelihood) with alpha = 0.88
+#> Number of Fisher Scoring iterations: 6
 ```
 
 In low-dimensional setting when the high dimensional correction
@@ -934,6 +934,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
