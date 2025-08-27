@@ -640,7 +640,7 @@ An alternative way of writing the same Hypothesis test system is the
 following: 
 
 $$
-H_0: \boldsymbol{\beta}\in \{\boldsymbol{\beta}\in\mathbb{R}^p\ |\ \beta_j=0\ \ \forall j\in I\} \qquad\text{vs}\qquad H_1: \boldsymbol{\beta}\in\mathbb{R}^p
+H_0: \beta\in (\beta\in\mathbb{R}^p\ |\ \beta_j=0\ \ \forall j\in I) \qquad\text{vs}\qquad H_1: \boldsymbol{\beta}\in\mathbb{R}^p
 $$ 
 
 with $I$ the set of indices associated with Karhunen-Loeve
@@ -810,6 +810,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
