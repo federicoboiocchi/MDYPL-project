@@ -470,7 +470,7 @@ all(round(probs_f,12)==round(fitted_prob_f,12))
 #> [1] TRUE
 ```
 
-## Graph of predicted probabilities vs statistical units clustered by labels
+## Graph of predicted probabilities vs statistical units clustered by digit
 
 ``` r
 size<-0.7 # font size
@@ -1053,6 +1053,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
