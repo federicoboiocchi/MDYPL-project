@@ -91,9 +91,13 @@ dataset is the following:
   $(u,v)$, and thus indicates the importance of a particular pattern
   within the image. The intuition is that each pixel value $f(x,y)$ in
   the image can be approximated with a linear combination of cosine and
-  sine waves: $$
+  sine waves:
+
+  $$
   f(x,y)=\underset{u,v}{\sum}C(u,v)e^{i2\pi\left(\displaystyle\frac{ux}{M}+\frac{vy}{N}\right)} 
-  $$ This is also known as fourier decomposition of an image.
+  $$
+
+  This is also known as fourier decomposition of an image.
 - **Binary response**: a label taking value either 0 or 1, indicating
   whether the image contains a specific, arbitrarily chosen digit. Since
   we know the ground truth for all digits we will be able to assess the
@@ -185,15 +189,23 @@ y_tr <- as.matrix(train[,2])
 
 ## High-dimensional Maximum Diaconis-Ylvisaker penalized logistic regression
 
-We will use the following logistic regression model: $$
+We will use the following logistic regression model: 
+
+$$
 \mathbb{P}(y_i=1\ |\ \mathbf{x}_i^\top )= \frac{1}{1+\text{exp}(-\mathbf{x}_i^\top\boldsymbol{\beta})}\qquad \text{for}\ \  i = 1,\dots,1000\\
-$$ where $y_i$ is the label indicating wheter the image is a 7 or not
+$$
+
+where $y_i$ is the label indicating wheter the image is a 7 or not
 and the linear predictor includes both Fourier coefficients and PCA
 scores or only Fourier coefficients depending on the model used. Since
 we are using a *Diaconis-Ylvisaker* penalized logistic regression, the
-estimator of the regression coefficients has the following form: $$
+estimator of the regression coefficients has the following form: 
+
+$$
 \widehat{\boldsymbol{\beta}}_{\text{DY}}=\underset{\boldsymbol{\beta}\in\mathbb{R}^p}{\text{argmax}}\ l(\boldsymbol{\beta};\mathbf{y},\mathbf{X})+\text{ln}(\pi(\boldsymbol{\beta}))\quad \text{with}\quad \pi(\beta)\sim \text{DY}(\alpha,\boldsymbol{\beta}_p),
-$$ where $l(\boldsymbol{\beta};\mathbf{y},\mathbf{X})$ represents the
+$$ 
+
+where $l(\boldsymbol{\beta};\mathbf{y},\mathbf{X})$ represents the
 log-likelihood of a sample of Bernoulli whose mean is modeled with the
 inverse logit of a linear predictor; while
 $\text{ln}(\pi(\boldsymbol{\beta}))$ represents the natural logarithm of
@@ -810,7 +822,9 @@ corrected estimates are defined as follows:
 
 $$
 \widehat{\boldsymbol{\beta}}^{\text{RES}}_{\text{DY}}= \frac{\widehat{\boldsymbol{\beta}}_{\text{DY}}}{\mu_{*}}
-$$ where the nonlinear system is the one specified in section 6 of [P.
+$$
+
+where the nonlinear system is the one specified in section 6 of [P.
 Sterzinger, I. Kosmidis](https://arxiv.org/abs/2311.07419).
 
 ## Performance comparison
@@ -856,16 +870,26 @@ mod_fk <- glm(y_tr ~ X_tr_std,family=binomial(),method="mdyplFit",alpha=alpha)
 
 **Penalized Likelihood Ratio test statistics (PLR)**
 
-The PLR has the following form: $$
+The PLR has the following form: 
+
+$$
 \Lambda_{I}= \underset{\boldsymbol{\beta}\in\mathbb{R}^p}{\sup}\ l(\boldsymbol{\beta};\mathbf{y},\mathbf{X})-\underset{\beta_j=0\ ,\ j\in I}{\underset{\boldsymbol{\beta}\in\mathbb{R}^p}{\sup}}\ l(\boldsymbol{\beta};\mathbf{y},\mathbf{X})
 $$
 
-The Hypotesis test we are interested in is the following $$
+The Hypotesis test we are interested in is the following 
+
+$$
 H_0: \Lambda_{\text{pop}}=0\qquad\text{vs}\qquad H_1: \Lambda_{\text{pop}}\neq0
-$$ An alternative way of writing the same Hypothesis test system is the
-following: $$
+$$
+
+An alternative way of writing the same Hypothesis test system is the
+following: 
+
+$$
 H_0: \boldsymbol{\beta}\in \{\boldsymbol{\beta}\in\mathbb{R}^p\ |\ \beta_j=0\ \ \forall j\in I\} \qquad\text{vs}\qquad H_1: \boldsymbol{\beta}\in\mathbb{R}^p
-$$ with $I$ the set of indices associated with Karhunen-Loeve
+$$ 
+
+with $I$ the set of indices associated with Karhunen-Loeve
 coefficients. In other words we are comparing the two nested models to
 understand according to data which is more plausible. As with every
 hypothesis testing procedure we arbitrarily fix a probability of
@@ -874,9 +898,13 @@ the significance level has nothing to do with the shrinkage
 hyperparamater of the DY prior.
 
 We know from **Wilks’ theorem** that for the Penalized likelihood ratio
-test statistics (PLR) the following result holds: $$
+test statistics (PLR) the following result holds: 
+
+$$
 2\Lambda_{I}\sim\chi^2_{p-r}
-$$ with $\chi^2_{p-r}$ being a Chi-squared distribution with$p-r$
+$$ 
+
+with $\chi^2_{p-r}$ being a Chi-squared distribution with$p-r$
 degrees of freedom; while $p$ is the total number of dimensions and $r$
 the number of constraints. For a regression model $k=p-r$ is the
 difference between the number of explanatory variables in the full and
@@ -1026,6 +1054,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
