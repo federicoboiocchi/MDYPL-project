@@ -1045,7 +1045,7 @@ legend("topright", inset=c(-1.2,-2), legend=c("PLR", "rescaled PLR","identity li
        lty=c(NA, NA, 2),xpd=NA,cex=0.9)
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![lrt](Vignette_brglm2_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 As we can see, applying the correction suggested by Theorem 3.5 restores
 the result of Wilks’s theorem: the corrected penalized likelihood ratio
@@ -1054,6 +1054,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
