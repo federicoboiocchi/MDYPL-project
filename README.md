@@ -92,10 +92,8 @@ dataset is the following:
   within the image. The intuition is that each pixel value $f(x,y)$ in
   the image can be approximated with a linear combination of cosine and
   sine waves:
-
-  $$
-  f(x,y)=\underset{u,v}{\sum}C(u,v)e^{i2\pi\left(\displaystyle\frac{ux}{M}+\frac{vy}{N}\right)} 
-  $$
+  
+  $$f(x,y)=\underset{u,v}{\sum}C(u,v)e^{i2\pi\left(\displaystyle\frac{ux}{M}+\frac{vy}{N}\right)}$$
   
   This is also known as fourier decomposition of an image.
 - **Binary response**: a label taking value either 0 or 1, indicating
@@ -1054,6 +1052,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
