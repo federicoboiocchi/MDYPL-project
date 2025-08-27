@@ -499,7 +499,7 @@ pp <- function(probs,pix,df,title){
 pp(probs_f,pix_tr,train,"MDYPL logistic regression (Fourier)")
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-20-1.png)<!-- -->
 
 **MDYPL predicted probabilities using Fourier and Karhunen-Loeve
 coefficients (training)**
@@ -508,7 +508,7 @@ coefficients (training)**
 pp(probs_fk,pix_tr,train,"MDYPL logistic regression (Fourier and PCA)")
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-21-1.png)<!-- -->
 
 We can observe that while the full model classifies the digit 7
 perfectly, the model using only Fourier coefficients does not. It
@@ -729,7 +729,7 @@ the following graphs, where the intercept has been removed,due to its
 different order of magnitude, in order to allow for a meaningful
 comparison:
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-24-1.png)<!-- -->![](Vignette_pictures/unnamed-chunk-24-2.png)<!-- -->
 
 ``` r
 # scaled linear predictor
@@ -745,7 +745,7 @@ coefficients (training)**
 pp(probs_fk_res,pix_tr,train,"rescaled MDYPL (Fourier and PCA)")
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-26-1.png)<!-- -->
 
 ## TEST SET
 
@@ -788,7 +788,7 @@ probs_f <- link(eta_f)
 pp(probs_f,pix_ts,test,"MDYPL test (Fourier)")
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-31-1.png)<!-- -->
 **MDYPL predicted probabilities using Fourier and Karhunen-Loeve
 coefficients (test)**
 
@@ -796,7 +796,7 @@ coefficients (test)**
 pp(probs_fk,pix_ts,test,"MDYPL test (Fourier and PCA)")
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-32-1.png)<!-- -->
 
 **MDYPL predicted probabilities using Fourier and Karhunen-Loeve
 coefficients rescaled signal(test)**
@@ -805,7 +805,7 @@ coefficients rescaled signal(test)**
 pp(probs_fk_res,pix_ts,test,"MDYPL test (Fourier and PCA)")
 ```
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-33-1.png)<!-- -->
 
 As expected, the overall performance on the test set is worse than that
 on the training set. More interestingly, the model that includes both
@@ -1045,7 +1045,7 @@ legend("topright", inset=c(-1.2,-2), legend=c("PLR", "rescaled PLR","identity li
        lty=c(NA, NA, 2),xpd=NA,cex=0.9)
 ```
 
-![lrt](Vignette_brglm2_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![lrt](Vignette_pictures/unnamed-chunk-43-1.png)<!-- -->
 
 As we can see, applying the correction suggested by Theorem 3.5 restores
 the result of Wilks’s theorem: the corrected penalized likelihood ratio
@@ -1054,6 +1054,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
