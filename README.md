@@ -70,7 +70,7 @@ dataset is the following:
   class. Depending on the font and level of noise in the digitisation
   phase, difficulties may arise in classifying them.
 
-![](Vignette_brglm2_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](Vignette_pictures/unnamed-chunk-2-1.png)<!-- -->
 
 - **Explanatory variables**: the dataset includes several explanatory
   variable, however in this analysis we will primary focus on the values
@@ -1054,6 +1054,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
