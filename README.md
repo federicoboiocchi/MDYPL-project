@@ -245,7 +245,7 @@ cat(tail(s, 20), sep = "\n")
 #> -0.9399  -0.4174  -0.3341  -0.2480   0.9397  
 #>
 #> Coefficients:
-#>                Estimate Std. Error z value Pr(>|z|)    
+#>                 Estimate Std. Error z value Pr(>|z|)    
 #> (Intercept)   -2.3491346  0.1320712 -17.787   <2e-16 ***
 #> X_tr_stdfou1   0.2242358  0.2802190   0.800    0.424    
 #> X_tr_stdfou2  -0.0901030  0.3427133  -0.263    0.793    
@@ -810,6 +810,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
