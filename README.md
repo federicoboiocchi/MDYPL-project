@@ -658,7 +658,7 @@ $$
 2\Lambda_{I}\sim\chi^2_{p-r}
 $$ 
 
-with $\chi^2_{p-r}$ being a Chi-squared distribution with$p-r$
+with $\chi^2_{p-r}$ being a Chi-squared distribution with $p-r$
 degrees of freedom; while $p$ is the total number of dimensions and $r$
 the number of constraints. For a regression model $k=p-r$ is the
 difference between the number of explanatory variables in the full and
@@ -810,6 +810,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
