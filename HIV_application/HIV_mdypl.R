@@ -5,15 +5,18 @@
 #rm(list = ls())
 
 library(tidyverse)
-library(latex2exp)
 
 set.seed(123)
 
-setwd("C:\\Users\\andre\\Desktop\\MDYPL_R_warwick\\HIV_mdypl")
+# setwd("C:\\Users\\andre\\Desktop\\MDYPL_R_warwick\\HIV_mdypl")
 
 y_X <- read.csv("data_hiv")
-dim(y_X) # it adds a column
-lim <- 30
+dim(y_X) # it adds a column automatically to index rows
+
+# we have to make the drug resistance response variable binary.
+# we arboitrarily choose 30 as the boundary between low drug resistance level and
+# high drug resistance.
+lim <- 30 
 
 y <- y_X$y
 X <- y_X[, -c(1, 2)]
@@ -24,7 +27,7 @@ y_01 <- ifelse(y < lim, 0, 1)
 # Remark: we have unbalanced classes, we should take this into account when
 # estimating the logistic regression
 
-# Resampling to adjust for unbalanced classes
+# Resampling to adjust for unbalanced classes:
 
 size_adj <- sum(y_01 == 0) - sum(y_01 == 1)
 
@@ -34,34 +37,30 @@ yX_tot <- rbind(yX, yX_add)
 N <- dim(yX_tot)[1]
 shuff_ind <- sample(1:N, size = N, replace = FALSE) # default (shown to be clear)
 
-# binary response and sparse design matrix
+# Binary response and sparse design matrix
 
 yX_tot <- yX_tot[shuff_ind, ]
-
-y <- as.data.frame(yX_tot[, 1])
-dim(y)
+y <- as.data.frame(yX_tot[, 1]); dim(y);
 X <- as.data.frame(yX_tot[, -1])
 
-dim(X)
-anyNA(y)
-anyNA(X)
+# some checks
+dim(X);anyNA(y);anyNA(X)
 
-# Importing the brglm2 library
+# Importing the brglm2 library, needed to use the method "mdyplFit" for logistic regression
 
 library(brglm2)
 
 # splitting in training and test (50/50)
-
 train_id <- sample(1:N, size = round(N / 2), replace = FALSE)
 
 # train set
 X_tr <- as.matrix(X[train_id,])
-X_tr_std <- scale(X_tr,center=TRUE,scale=TRUE)
-
+X_tr_std <- scale(X_tr,center=TRUE,scale=TRUE) # standardization
+# checking for NAs
 anyNA(X_tr_std)
 image(t(is.na(X_tr_std)))
 sum(is.na(X_tr_std))
-
+# defining a function to give the position of NAs
 whichNA <- function(X){
   n <- dim(X)[1]
   p <- dim(X)[2]
@@ -75,54 +74,46 @@ whichNA <- function(X){
   }
   return(pos)
 }
-
-# In the columns 30 and 167 we have
-# NaN after the standardization. hence we remove them
-# since the standardization will help later. 
+# In the columns 30 and 167 we have NaN's, derinving from the operation of standardization. Therefore we remove them
+# since the standardization will help later. Alternatively, one could have avoided to delete an entire mutation (feature)
+# at the cost of not being able to standardize and having issues later with the hd_correction. 
 whichNA(X_tr_std)
 dim(X_tr_std)
-
 X_tr_std[,30]
 X_tr_std[,167]
-
 X_tr <- X_tr_std[,-c(30,167)] 
-
 anyNA(X_tr)
 
 y_tr <- as.matrix(y[train_id,])
 y_tr <- factor(y_tr) # response is a binary (categorical variable)
 
-# test set
+# Test set
 X_ts <- as.matrix(X[-train_id,-c(30,167)])
-#X_ts <- as.matrix(X[-train_id,])
-
 y_ts <- as.matrix(y[-train_id,])
 y_ts <- factor(y_ts)
 
 X_ts_std <- scale(X_ts,center=TRUE,scale=TRUE)
 anyNA(X_ts_std)
-
 whichNA(X_ts_std)
-
-X_ts <- X_ts_std[,-195]
-
+X_ts <- X_ts_std[,-195] # index associated with NaN's
 anyNA(X_ts)
 
-# Standard logistic regression fails to converge 
+# Standard logistic regression model
 
 # we get warnings about convergence and probabilities fitted
-# to 0 or 1
+# to 0 or 1. The IRLS inside the logistic regression fails to converge
+
 mod <- glm(y_tr ~ X_tr, 
            family = binomial(link = "logit"))
 
-
+# Penalized likelihood approach and high-dimensional correction (Kosmidis,Sterzinger 2024)
 # DY penalized logistic regression model estimation:
 
 mod_DY <- glm(y_tr ~ X_tr, 
     family = binomial(link = "logit"), 
     method = "mdyplFit")
 
-# Estimated regression coefficients (beta_DY_hat) using the mdypl fitter
+# Estimated regression coefficients (beta_DY_hat) using the mdypl fitter:
 
 betas <- coef(mod_DY) # it might contains NAs 
 ind_NA <- as.numeric(which(is.na(betas)==TRUE))
@@ -137,7 +128,7 @@ eta_hat <- cbind(ones,X_tr)%*%b_DY
 
 # rowSums(X_tr) how many mutations for each patient
 
-# inverse logistic link function 
+# Inverse logistic link function 
 
 link <- function(x){
   1/(1+exp(-x))
@@ -148,13 +139,12 @@ link <- function(x){
 probs_DY <- link(eta_hat)
 probs_fit <- fitted(mod_DY)
 
-# equivalently it could have been used 
-# probs_DY <- fitted(mod_DY), but we wanted to show the whole
-# computation of the linear predictor and regression coefficients
+# equivalently it could have been used probs_DY <- fitted(mod_DY), but we wanted to show the whole
+# computation of the linear predictor and regression coefficients, and that even though we don't see it sometimes certain covariates are completely eliminated
+# in the computation of the predicted probabilities. On the contrary, here, we have full control of what we are doing.
 
-# the goodness of the model must be assessed on the test set,
-# namely, we use the DY regression coefficients estimated on the training
-# to do binary classification on the test set (we don't train the model on the test)
+# Obviously, the goodness of the model must be assessed on the test set, namely, we use the DY regression coefficients estimated on the training set
+# to do binary classification on the test set (we don't train the model on the test, but just evaluate it).
 
 n_ts <- dim(X_ts)[1]
 X_ts <- X_ts[,-ind_NA]
@@ -162,12 +152,9 @@ dim(X_ts)
 eta_hat_test <- cbind(ones,X_ts)%*%b_DY[-197] 
 
 probs_DY_ts <- link(eta_hat_test)
-
-
-
 est_labels <- ifelse(probs_DY_ts>0.5,1,0)
 ground_truth <- y_ts
-
+# accuracy function
 acc <- function(x,y){
   if(length(x)==length(y)){
     out <- sum(x==y)/length(x)
@@ -178,28 +165,35 @@ acc <- function(x,y){
 }
 
 # accuracy on the test set
-
-acc(est_labels,y_ts)
+acc(est_labels,y_ts) # approx: 0.851
 
 # High-Dimensionality correction:
 
-#summary(mod_DY,hd_correction=TRUE)
+# we avoid to use the summary below, in order to give a more detailed presentation 
+# on how the hd_correction works.
+# summary(mod_DY,hd_correction=TRUE)
 
-k <- dim(X_tr)[2]/dim(X_tr)[1]
-alpha <- 1/(1+k)
-ss <- sloe(mod_DY)
+k <- dim(X_tr)[2]/dim(X_tr)[1] # aspect ratio
+alpha <- 1/(1+k) # hyperparameter controlling the variability of the Diaconis-Ylvisaker prior
+ss <- sloe(mod_DY) # sloe estimator (it turns out not to work with this data), we unpack it to 
+# discover the problem and fix it manually.
 
-# unpacking sloe function
-
+# Unpacking sloe function (Signal-Strength-Leave-One-Out Estimator)
+# getting the function from in the R console
 getAnywhere(sloe)
-
+# recomputing the quantities
 mu <- fitted(mod_DY)
 v <- mu * (1 - mu)
 h <- hatvalues(mod_DY)
 S <- mod_DY$linear.predictors - (mod_DY$y_adj - mu)/v * (h/(1-h))
-S_feasible <- S[abs(S)<Inf]  # fixed this problem
+# (h/(1-h)) the ratio between hat values creates + and -Inf. Hence we restrict the values
+# of signal strenghts that are allowed.
+S_feasible <- S[abs(S)<Inf]  # we fix it by considering only finite s_i 
 ss <- sd(S_feasible)
 inter <- b_DY[1]
+
+# we apply the function solve_se() (Author: Federico Boiocchi based on previous Julia code by Philipp Sterzinger), in order to solve 
+# the AMP state evolution system and find the parameter mu_* used to correct the estimated regression coefficients. 
 
 se_pars <- solve_se(kappa = k, ss = ss, alpha = alpha,
                         intercept = inter,
@@ -221,8 +215,8 @@ est_labels_corr <- ifelse(probs_DY_corr>0.5,1,0)
 acc(est_labels_corr,y_ts) 
 
 # we are not able to appreciate the difference
-# in terms of accuracy, since it doesn't take into account predicted probabilities
-# but just labels
+# in terms of accuracy, since the accuracy doesn't take into account predicted probabilities
+# but just labels.
 
 # Predicted probabilities on the test set graph:
 
@@ -252,6 +246,8 @@ points((n_0+1):(n_0+n_1),probs_DY_corr[ind_1],
        col="red",pch="1",cex=0.5)
 abline(h=0.5,col="blue",lwd=1.2,lty="dashed")
 
+# plot availavle in this folder under the name of pred_prob_comp.jpeg
+
 # Classifier relative entropy for logistic regression
 # with hd_correction and withouth hd_correction
 
@@ -275,5 +271,6 @@ rEN(pp_no_hd) # we have 68% of the entropy we would have in the case of random a
 rEN(pp_hd) # we have 50% of the entropy
 
 # a lower value of rEN means a better classification. 
+
 
 
