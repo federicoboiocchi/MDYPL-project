@@ -1,6 +1,8 @@
+# Author: Federico Boiocchi
+
 # Diaconis-Ylvisaker logistic regression on a binary dataset
 
-rm(list = ls())
+#rm(list = ls())
 
 library(tidyverse)
 library(latex2exp)
@@ -273,4 +275,5 @@ rEN(pp_no_hd) # we have 68% of the entropy we would have in the case of random a
 rEN(pp_hd) # we have 50% of the entropy
 
 # a lower value of rEN means a better classification. 
+
 
