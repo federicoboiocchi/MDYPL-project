@@ -3,6 +3,8 @@ Image recognition: case study
 [Federico Boiocchi](https://github.com/federicoboiocchi)
 29 August 2025
 
+Full analysis here:  https://federicoboiocchi.github.io/MDYPL-project/
+
 ## Motivation:
 
 In many real word scenarios it is of interest to understand and classify
@@ -810,6 +812,7 @@ corresponding to the difference between the total number of parameters
 and those constrained to be zero. It is also evident that as the
 intercept and signal strength increase, the correction becomes
 increasingly important, since the two QQ plots diverge more markedly.
+
 
 
 
